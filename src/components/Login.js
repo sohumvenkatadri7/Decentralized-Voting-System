@@ -6,18 +6,25 @@ const Login = ({ web3Handler, account, setUserRole }) => {
   const [aadharNumber, setAadharNumber] = useState('');
   const [otp, setOtp] = useState('');
   const [showOtpInput, setShowOtpInput] = useState(false);
-  const [isVerified, setIsVerified] = useState(false);
+  const [isAadharVerified, setIsAadharVerified] = useState(false);
   const [error, setError] = useState('');
   const [loading, setLoading] = useState(false);
+  const [walletConnected, setWalletConnected] = useState(false);
   const navigate = useNavigate();
 
   useEffect(() => {
-    // Check if already connected
-    if (account && isVerified) {
-      // Check if admin (this would come from smart contract)
+    // Check if wallet is already connected
+    if (account) {
+      setWalletConnected(true);
+    }
+  }, [account]);
+
+  useEffect(() => {
+    // If both wallet connected and Aadhar verified, check role
+    if (account && isAadharVerified) {
       checkUserRole();
     }
-  }, [account, isVerified]);
+  }, [account, isAadharVerified]);
 
   const checkUserRole = async () => {
     try {
@@ -78,20 +85,14 @@ const Login = ({ web3Handler, account, setUserRole }) => {
     // In production, verify OTP with backend
     setTimeout(() => {
       setLoading(false);
-      setIsVerified(true);
-      console.log('Aadhar verified! isVerified set to:', true);
-      // Don't use alert, it might block state update
+      setIsAadharVerified(true);
+      console.log('Aadhar verified successfully!');
     }, 1500);
   };
 
   const handleMetaMaskConnect = async () => {
-    if (!isVerified) {
-      setError('Please verify your Aadhar first');
-      return;
-    }
-
     try {
-      // Request account access - this will show MetaMask popup even if previously connected
+      // Request account access - this will show MetaMask popup
       await window.ethereum.request({
         method: 'wallet_requestPermissions',
         params: [{ eth_accounts: {} }],
@@ -99,6 +100,7 @@ const Login = ({ web3Handler, account, setUserRole }) => {
       
       // Then connect
       await web3Handler();
+      setWalletConnected(true);
     } catch (err) {
       if (err.code === 4001) {
         setError('Please connect your wallet to continue');
@@ -115,9 +117,27 @@ const Login = ({ web3Handler, account, setUserRole }) => {
         <h1>Decentralized Voting System</h1>
         <p className="subtitle">Secure • Transparent • Democratic</p>
 
-        {!isVerified ? (
+        {/* Step 1: Connect Wallet First */}
+        {!walletConnected ? (
+          <div className="wallet-section">
+            <h2>Step 1: Connect Your Wallet</h2>
+            <div className="wallet-info">
+              <img 
+                src="https://upload.wikimedia.org/wikipedia/commons/3/36/MetaMask_Fox.svg" 
+                alt="MetaMask" 
+                className="metamask-logo"
+              />
+              <p>Connect your MetaMask wallet to continue</p>
+              <button onClick={handleMetaMaskConnect} className="btn-wallet">
+                🦊 Connect MetaMask Wallet
+              </button>
+            </div>
+          </div>
+        ) : !isAadharVerified ? (
+          /* Step 2: Aadhar Verification After Wallet Connected */
           <div className="verification-section">
-            <h2>Step 1: Verify Your Identity</h2>
+            <div className="success-check">✓ Wallet Connected: {account.slice(0, 6)}...{account.slice(-4)}</div>
+            <h2>Step 2: Verify Your Identity</h2>
             
             {!showOtpInput ? (
               <form onSubmit={handleAadharSubmit}>
@@ -165,34 +185,12 @@ const Login = ({ web3Handler, account, setUserRole }) => {
             )}
           </div>
         ) : (
-          <div className="wallet-section">
-            <div className="success-check">✓ Aadhar Verified Successfully!</div>
-            <h2>Step 2: Connect Your Wallet</h2>
-            <div className="wallet-info">
-              <img 
-                src="https://upload.wikimedia.org/wikipedia/commons/3/36/MetaMask_Fox.svg" 
-                alt="MetaMask" 
-                className="metamask-logo"
-              />
-              {!account ? (
-                <>
-                  <p>Connect your MetaMask wallet to proceed</p>
-                  <button onClick={handleMetaMaskConnect} className="btn-wallet">
-                    🦊 Connect MetaMask Wallet
-                  </button>
-                </>
-              ) : (
-                <>
-                  <p className="success">✓ Wallet Connected</p>
-                  <p className="wallet-address">
-                    {account.slice(0, 6)}...{account.slice(-4)}
-                  </p>
-                  <button onClick={checkUserRole} className="btn-primary">
-                    Proceed to Voting
-                  </button>
-                </>
-              )}
-            </div>
+          /* Both Verified - Redirect happening */
+          <div className="success-section">
+            <div className="success-check">✓ Wallet Connected</div>
+            <div className="success-check">✓ Aadhar Verified</div>
+            <h2>Authentication Complete!</h2>
+            <p>Redirecting you to the voting page...</p>
           </div>
         )}
 
@@ -201,9 +199,9 @@ const Login = ({ web3Handler, account, setUserRole }) => {
         <div className="info-section">
           <h3>Requirements:</h3>
           <ul>
-            <li>Valid Aadhar Card</li>
             <li>MetaMask Wallet installed in your browser</li>
             <li>Connected to Ganache network (localhost:7545)</li>
+            <li>Valid Aadhar Card for verification</li>
           </ul>
         </div>
       </div>
