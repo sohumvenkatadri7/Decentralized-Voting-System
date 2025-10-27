@@ -1,0 +1,11 @@
+node_modules/
+dist/
+cache/
+artifacts/
+.env
+*.log
+.DS_Store
+coverage/
+
+# Keep placeholder contract files, but they will be overwritten on deployment
+# src/contracts/
