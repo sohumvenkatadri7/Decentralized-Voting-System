@@ -45,15 +45,15 @@ Before you begin, ensure you have the following installed:
 ## Installation
 
 ### 1. Clone the Repository
-\`\`\`bash
+\`\`bash
 git clone https://github.com/sohumvenkatadri7/Decentralized-Voting-System.git
 cd Decentralized-Voting-System
-\`\`\`
+\`\`
 
 ### 2. Install Dependencies
-\`\`\`bash
+\`\`bash
 npm install
-\`\`\`
+\`\`
 
 ## Setup Instructions
 
@@ -73,7 +73,7 @@ npm install
 
 Edit `hardhat.config.js` and add your Ganache account private keys:
 
-\`\`\`javascript
+\`\`javascript
 networks: {
   development: {
     url: "http://127.0.0.1:7545",
@@ -85,7 +85,7 @@ networks: {
     chainId: 1337
   }
 }
-\`\`\`
+\`\`
 
 **To get private keys from Ganache:**
 - Click on the key icon next to any account
@@ -117,14 +117,14 @@ After importing accounts, set the admin address in localStorage:
 ## Deployment
 
 ### 1. Compile Smart Contract
-\`\`\`bash
+\`\`bash
 npm run compile
-\`\`\`
+\`\`
 
 ### 2. Deploy to Ganache
-\`\`\`bash
+\`\`bash
 npm run deploy
-\`\`\`
+\`\`
 
 This will:
 - Deploy the VotingSystem contract to Ganache
@@ -134,9 +134,9 @@ This will:
 **Important**: Keep the contract address safe. You'll need it for interacting with the contract.
 
 ### 3. Start the Development Server
-\`\`\`bash
+\`\`bash
 npm start
-\`\`\`
+\`\`
 
 The application will open at `http://localhost:3000`
 
@@ -180,7 +180,7 @@ The application will open at `http://localhost:3000`
 
 ## Project Structure
 
-\`\`\`
+\`\`
 - Decentralized-Voting-System/
 - ├── contracts/
 - │   └── VotingSystem.sol          # Solidity smart contract
@@ -190,25 +190,25 @@ The application will open at `http://localhost:3000`
 - │   ├── components/
 - │   │   ├── Login.js              # Login page component
 - │   │   ├── Login.css
-│   │   ├── Voting.js             # Voting page component
-│   │   ├── Voting.css
-│   │   ├── Admin.js              # Admin dashboard component
-│   │   └── Admin.css
-│   ├── utils/
-│   │   └── web3Utils.js          # Web3 utility functions
-│   ├── contracts/                # Generated contract files
-│   │   ├── contract-address.json
-│   │   └── VotingSystem.json
-│   ├── App.js                    # Main app component
-│   ├── App.css
-│   └── index.js                  # Entry point
-├── public/
-│   └── index.html
-├── hardhat.config.js             # Hardhat configuration
-├── webpack.config.js             # Webpack configuration
-├── package.json
-└── README.md
-\`\`\`
+- │   │   ├── Voting.js             # Voting page component
+- │   │   ├── Voting.css
+- │   │   ├── Admin.js              # Admin dashboard component
+- │   │   └── Admin.css
+- │   ├── utils/
+- │   │   └── web3Utils.js          # Web3 utility functions
+- │   ├── contracts/                # Generated contract files
+- │   │   ├── contract-address.json
+- │   │   └── VotingSystem.json
+- │    ├── App.js                    # Main app component
+- │   ├── App.css
+- │   └── index.js                  # Entry point
+- ├── public/
+- │   └── index.html
+- ├── hardhat.config.js             # Hardhat configuration
+- ├── webpack.config.js             # Webpack configuration
+- ├── package.json
+- └── README.md
+\`\`
 
 ## Smart Contract Functions
 
