@@ -188,8 +188,8 @@ The application will open at `http://localhost:3000`
 - │   └── deploy.js                 # Deployment script
 - ├── src/
 - │   ├── components/
-│   │   ├── Login.js              # Login page component
-│   │   ├── Login.css
+- │   │   ├── Login.js              # Login page component
+- │   │   ├── Login.css
 │   │   ├── Voting.js             # Voting page component
 │   │   ├── Voting.css
 │   │   ├── Admin.js              # Admin dashboard component
