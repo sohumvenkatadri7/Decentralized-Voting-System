@@ -181,13 +181,13 @@ The application will open at `http://localhost:3000`
 ## Project Structure
 
 \`\`\`
-Decentralized-Voting-System/
-├── contracts/
-│   └── VotingSystem.sol          # Solidity smart contract
-├── scripts/
-│   └── deploy.js                 # Deployment script
-├── src/
-│   ├── components/
+- Decentralized-Voting-System/
+- ├── contracts/
+- │   └── VotingSystem.sol          # Solidity smart contract
+- ├── scripts/
+- │   └── deploy.js                 # Deployment script
+- ├── src/
+- │   ├── components/
 │   │   ├── Login.js              # Login page component
 │   │   ├── Login.css
 │   │   ├── Voting.js             # Voting page component
