@@ -166,154 +166,174 @@ const Admin = ({ contract, account }) => {
 
   return (
     <div className="admin-container">
+      {/* Header */}
       <header className="admin-header">
-        <h1>⚙️ Admin Dashboard</h1>
+        <h1>Admin Control Panel</h1>
+        <p className="subtitle">Manage voting process and nominees</p>
         <div className="header-info">
-          <span className="account-badge">
-            Admin: {account.slice(0, 6)}...{account.slice(-4)}
-          </span>
+          <div className="account-badge">
+            <span>👑</span>
+            <code>{account.slice(0, 6)}...{account.slice(-4)}</code>
+          </div>
           <button onClick={handleLogout} className="btn-logout">
-            Logout
+            Logout →
           </button>
         </div>
       </header>
 
-      {error && <div className="error-message">{error}</div>}
+      {error && (
+        <div className="status-message error">
+          ⚠️ {error}
+        </div>
+      )}
 
-      {/* Stats Section */}
-      <div className="stats-grid">
+      {/* Stats Dashboard */}
+      <div className="admin-stats">
         <div className="stat-card">
-          <div className="stat-icon">📊</div>
-          <div className="stat-info">
-            <div className="stat-value">{totalVotes}</div>
-            <div className="stat-label">Total Votes</div>
-          </div>
+          <div className="stat-label">Total Votes Cast</div>
+          <div className="stat-value">{totalVotes}</div>
         </div>
         
         <div className="stat-card">
-          <div className="stat-icon">👥</div>
-          <div className="stat-info">
-            <div className="stat-value">{nominees.length}</div>
-            <div className="stat-label">Nominees</div>
-          </div>
+          <div className="stat-label">Total Nominees</div>
+          <div className="stat-value">{nominees.length}</div>
         </div>
         
         <div className="stat-card">
-          <div className="stat-icon">🗳️</div>
-          <div className="stat-info">
-            <div className="stat-value">{votingOpen ? 'Open' : 'Closed'}</div>
-            <div className="stat-label">Voting Status</div>
+          <div className="stat-label">Voting Status</div>
+          <div className="stat-value" style={{ color: votingOpen ? '#22c55e' : '#ef4444' }}>
+            {votingOpen ? 'Open' : 'Closed'}
           </div>
         </div>
       </div>
 
-      {/* Voting Control */}
-      <div className="control-section">
-        <h2>Voting Control</h2>
-        <button 
-          onClick={handleToggleVoting} 
-          className={`btn-toggle ${votingOpen ? 'close' : 'open'}`}
-        >
-          {votingOpen ? '🔒 Close Voting' : '🔓 Open Voting'}
-        </button>
-      </div>
-
-      {/* Add Nominee Form */}
-      <div className="form-section">
-        <h2>Add New Nominee</h2>
-        <form onSubmit={handleAddNominee}>
-          <div className="form-group">
-            <label htmlFor="nomineeName">Nominee Name</label>
-            <input
-              type="text"
-              id="nomineeName"
-              value={nomineeName}
-              onChange={(e) => setNomineeName(e.target.value)}
-              placeholder="Enter nominee name"
-              required
-            />
-          </div>
-          
-          <div className="form-group">
-            <label htmlFor="nomineeDescription">Description</label>
-            <textarea
-              id="nomineeDescription"
-              value={nomineeDescription}
-              onChange={(e) => setNomineeDescription(e.target.value)}
-              placeholder="Enter nominee description"
-              rows="3"
-              required
-            />
-          </div>
-          
-          <button type="submit" disabled={adding} className="btn-primary">
-            {adding ? 'Adding...' : 'Add Nominee'}
+      {/* Main Content */}
+      <div className="admin-sections">
+        {/* Voting Control */}
+        <div className="admin-section">
+          <h2>🗳️ Voting Control</h2>
+          <p style={{ color: '#64748b', marginBottom: '20px', fontSize: '15px' }}>
+            {votingOpen ? 'Voting is currently open. Close it to prevent new votes.' : 'Voting is currently closed. Open it to allow users to vote.'}
+          </p>
+          <button 
+            onClick={handleToggleVoting} 
+            className={votingOpen ? 'btn-danger' : 'btn-success'}
+          >
+            {votingOpen ? '🔒 Close Voting Now' : '🔓 Open Voting Now'}
           </button>
-        </form>
-      </div>
+        </div>
 
-      {/* Register Voter Form */}
-      <div className="form-section">
-        <h2>Register New Voter</h2>
-        <form onSubmit={handleRegisterVoter}>
-          <div className="form-group">
-            <label htmlFor="voterAddress">Voter Wallet Address</label>
-            <input
-              type="text"
-              id="voterAddress"
-              value={voterAddress}
-              onChange={(e) => setVoterAddress(e.target.value)}
-              placeholder="0x..."
-              required
-            />
-          </div>
-          
-          <div className="form-group">
-            <label htmlFor="aadharHash">Aadhar Hash</label>
-            <input
-              type="text"
-              id="aadharHash"
-              value={aadharHash}
-              onChange={(e) => setAadharHash(e.target.value)}
-              placeholder="Enter Aadhar hash"
-              required
-            />
-          </div>
-          
-          <button type="submit" disabled={registering} className="btn-primary">
-            {registering ? 'Registering...' : 'Register Voter'}
-          </button>
-        </form>
-      </div>
+        {/* Add Nominee */}
+        <div className="admin-section">
+          <h2>➕ Add New Nominee</h2>
+          <form onSubmit={handleAddNominee}>
+            <div className="form-group">
+              <label>Nominee Name</label>
+              <input
+                type="text"
+                value={nomineeName}
+                onChange={(e) => setNomineeName(e.target.value)}
+                placeholder="Enter candidate name"
+                required
+              />
+            </div>
+            
+            <div className="form-group">
+              <label>Description</label>
+              <textarea
+                value={nomineeDescription}
+                onChange={(e) => setNomineeDescription(e.target.value)}
+                placeholder="Enter candidate description and qualifications"
+                rows="4"
+                required
+              />
+            </div>
+            
+            <button type="submit" disabled={adding} className="btn-primary">
+              {adding ? '⏳ Adding Nominee...' : '✓ Add Nominee'}
+            </button>
+          </form>
+        </div>
 
-      {/* Nominees and Results */}
-      <div className="results-section">
-        <h2>Current Results</h2>
-        {nominees.length === 0 ? (
-          <div className="no-data">No nominees added yet</div>
-        ) : (
-          <div className="nominees-list">
-            {nominees.map((nominee, index) => (
-              <div key={nominee.id} className="nominee-result">
-                <div className="nominee-rank">#{index + 1}</div>
-                <div className="nominee-info">
-                  <h3>{nominee.name}</h3>
-                  <p>{nominee.description}</p>
-                  <div className="vote-bar">
-                    <div 
-                      className="vote-bar-fill" 
-                      style={{ width: `${getVotePercentage(nominee.voteCount)}%` }}
-                    />
+        {/* Register Voter */}
+        <div className="admin-section">
+          <h2>👤 Register New Voter</h2>
+          <form onSubmit={handleRegisterVoter}>
+            <div className="form-group">
+              <label>Wallet Address</label>
+              <input
+                type="text"
+                value={voterAddress}
+                onChange={(e) => setVoterAddress(e.target.value)}
+                placeholder="0x..."
+                required
+              />
+            </div>
+            
+            <div className="form-group">
+              <label>Aadhar Hash</label>
+              <input
+                type="text"
+                value={aadharHash}
+                onChange={(e) => setAadharHash(e.target.value)}
+                placeholder="Hashed Aadhar number"
+                required
+              />
+            </div>
+            
+            <button type="submit" disabled={registering} className="btn-primary">
+              {registering ? '⏳ Registering...' : '✓ Register Voter'}
+            </button>
+          </form>
+        </div>
+
+        {/* Live Results */}
+        <div className="admin-section">
+          <h2>📊 Live Results</h2>
+          {nominees.length === 0 ? (
+            <div className="no-results">
+              No nominees have been added yet. Add nominees using the form above.
+            </div>
+          ) : (
+            <div className="results-grid">
+              {nominees.map((nominee, index) => {
+                const percentage = getVotePercentage(nominee.voteCount);
+                const isWinner = index === 0 && nominee.voteCount > 0;
+                
+                return (
+                  <div key={nominee.id} className="result-item">
+                    <div className="result-header">
+                      <h3>
+                        {index + 1}. {nominee.name}
+                        {isWinner && <span className="winner-badge">Winner</span>}
+                      </h3>
+                      <div className="result-votes">
+                        <div className="vote-number">{nominee.voteCount}</div>
+                        <div className="vote-label">Votes</div>
+                      </div>
+                    </div>
+                    <p className="result-details">{nominee.description}</p>
+                    <div className="progress-bar-container">
+                      <div 
+                        className="progress-bar" 
+                        style={{ width: `${percentage}%` }}
+                      />
+                    </div>
+                    <div style={{ 
+                      textAlign: 'right', 
+                      color: '#64748b', 
+                      fontSize: '13px', 
+                      fontWeight: '700',
+                      marginTop: '8px'
+                    }}>
+                      {percentage}%
+                    </div>
                   </div>
-                  <div className="vote-stats">
-                    <span>{nominee.voteCount} votes</span>
-                    <span>{getVotePercentage(nominee.voteCount)}%</span>
-                  </div>
-                </div>
-              </div>
-            ))}
-          </div>
-        )}
+                );
+              })}
+            </div>
+          )}
+        </div>
       </div>
     </div>
   );

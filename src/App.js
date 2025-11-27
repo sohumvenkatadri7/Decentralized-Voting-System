@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { BrowserRouter as Router, Routes, Route, Navigate } from 'react-router-dom';
 import Login from './components/Login';
+import AdminLogin from './components/AdminLogin';
 import Voting from './components/Voting';
 import Admin from './components/Admin';
 import AdminSetup from './components/AdminSetup';
@@ -77,6 +78,16 @@ function App() {
             } 
           />
           <Route 
+            path="/admin-login" 
+            element={
+              <AdminLogin 
+                web3Handler={web3Handler} 
+                account={account} 
+                setUserRole={setUserRole}
+              />
+            } 
+          />
+          <Route 
             path="/voting" 
             element={
               account && contract ? (
@@ -92,7 +103,7 @@ function App() {
               account && contract ? (
                 <Admin contract={contract} account={account} />
               ) : (
-                <Navigate to="/" replace />
+                <Navigate to="/admin-login" replace />
               )
             } 
           />

@@ -27,18 +27,22 @@ const AdminSetup = ({ onComplete }) => {
     return (
       <div className="admin-setup-overlay">
         <div className="admin-setup-card">
-          <h2>✅ Admin Address Already Set</h2>
-          <p className="admin-address-display">{existingAdmin}</p>
+          <div className="check-icon">✓</div>
+          <h2>Admin Already Configured</h2>
+          <div className="saved-address">
+            <label>Current Admin Address</label>
+            <code>{existingAdmin}</code>
+          </div>
           <div className="button-group">
             <button onClick={handleSkip} className="btn-continue">
-              Continue
+              Continue to App →
             </button>
             <button 
               onClick={() => {
                 localStorage.removeItem('adminAddress');
                 window.location.reload();
               }} 
-              className="btn-reset"
+              className="btn-change"
             >
               Change Admin
             </button>
@@ -53,23 +57,29 @@ const AdminSetup = ({ onComplete }) => {
       <div className="admin-setup-card">
         {!saved ? (
           <>
-            <h2>🔧 Initial Setup Required</h2>
-            <p>Set the admin wallet address for this voting system.</p>
+            <div className="setup-icon">🔧</div>
+            <h2>Admin Setup Required</h2>
+            <p>Configure the administrator wallet address for your voting system</p>
             
-            <div className="setup-instructions">
-              <h3>Steps:</h3>
-              <ol>
-                <li>Open <strong>Ganache</strong></li>
-                <li>Copy the <strong>first account address</strong></li>
-                <li>Paste it below</li>
-              </ol>
+            <div className="setup-steps">
+              <div className="step-item">
+                <span className="step-number">1</span>
+                <span>Launch Ganache blockchain</span>
+              </div>
+              <div className="step-item">
+                <span className="step-number">2</span>
+                <span>Copy first account address</span>
+              </div>
+              <div className="step-item">
+                <span className="step-number">3</span>
+                <span>Paste address below</span>
+              </div>
             </div>
 
             <div className="form-group">
-              <label htmlFor="adminAddress">Admin Wallet Address</label>
+              <label>Administrator Wallet Address</label>
               <input
                 type="text"
-                id="adminAddress"
                 value={adminAddress}
                 onChange={(e) => setAdminAddress(e.target.value)}
                 placeholder="0x..."
@@ -79,23 +89,30 @@ const AdminSetup = ({ onComplete }) => {
 
             <div className="button-group">
               <button onClick={handleSave} className="btn-save">
-                Save Admin Address
+                ✓ Save & Continue
               </button>
               <button onClick={handleSkip} className="btn-skip">
-                Skip (set in console later)
+                Skip for Now →
               </button>
             </div>
 
-            <div className="console-help">
-              <p><strong>Alternative:</strong> Set via browser console (F12):</p>
+            <div className="info-box">
+              <strong>💡 Developer Tip:</strong> You can also set this via console:
               <code>localStorage.setItem('adminAddress', 'YOUR_ADDRESS')</code>
             </div>
           </>
         ) : (
           <>
-            <h2>✅ Admin Address Saved!</h2>
-            <p className="admin-address-display">{adminAddress}</p>
-            <p className="success-message">Redirecting...</p>
+            <div className="success-icon">✓</div>
+            <h2>Setup Complete!</h2>
+            <div className="saved-address">
+              <label>Admin Address</label>
+              <code>{adminAddress}</code>
+            </div>
+            <div className="loading-spinner">
+              <div className="spinner"></div>
+              <p>Launching application...</p>
+            </div>
           </>
         )}
       </div>

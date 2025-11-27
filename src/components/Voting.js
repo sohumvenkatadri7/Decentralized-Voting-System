@@ -115,82 +115,97 @@ const Voting = ({ contract, account }) => {
 
   return (
     <div className="voting-container">
+      {/* Header */}
       <header className="voting-header">
-        <h1>🗳️ Cast Your Vote</h1>
+        <h1>Live Voting Portal</h1>
         <div className="header-info">
-          <span className="account-badge">
-            {account.slice(0, 6)}...{account.slice(-4)}
-          </span>
+          <div className="account-badge">
+            <span>👤</span>
+            <code>{account.slice(0, 6)}...{account.slice(-4)}</code>
+          </div>
+          <div className={`status-badge ${votingOpen ? 'active' : 'ended'}`}>
+            {votingOpen ? '🟢 Voting Open' : '🔴 Voting Closed'}
+          </div>
           <button onClick={handleLogout} className="btn-logout">
-            Logout
+            Logout →
           </button>
         </div>
       </header>
 
-      <div className="voting-status">
-        <div className={`status-badge ${votingOpen ? 'open' : 'closed'}`}>
-          {votingOpen ? '✓ Voting Open' : '✗ Voting Closed'}
-        </div>
-        {hasVoted && (
-          <div className="voted-badge">
-            ✓ You have already voted
-          </div>
-        )}
-      </div>
-
-      {error && <div className="error-message">{error}</div>}
-
-      {!votingOpen && (
-        <div className="info-message">
-          Voting is currently closed. Please wait for the admin to open voting.
+      {/* Error/Info Messages */}
+      {error && (
+        <div className="error-banner">
+          <span>⚠️</span>
+          <p>{error}</p>
         </div>
       )}
 
+      {hasVoted && (
+        <div className="success-banner">
+          <span>✓</span>
+          <p>Your vote has been successfully recorded on the blockchain</p>
+        </div>
+      )}
+
+      {/* Nominees Grid */}
       <div className="nominees-grid">
         {nominees.length === 0 ? (
           <div className="no-nominees">
-            No nominees available yet. Please check back later.
+            <div className="empty-icon">📭</div>
+            <h3>No Nominees Available</h3>
+            <p>The admin hasn't added any nominees yet. Please check back later.</p>
           </div>
         ) : (
           nominees.map((nominee) => (
             <div key={nominee.id} className="nominee-card">
-              <div className="nominee-header">
-                <h3>{nominee.name}</h3>
-                <div className="vote-count">
-                  <span className="count">{nominee.voteCount}</span>
-                  <span className="label">votes</span>
-                </div>
-              </div>
-              <p className="nominee-description">{nominee.description}</p>
+              <div className="nominee-id">#{nominee.id}</div>
               
-              <button
-                onClick={() => {
-                  setSelectedNominee(nominee.id);
-                  handleVote(nominee.id);
-                }}
-                disabled={!votingOpen || hasVoted || voting}
-                className={`btn-vote ${selectedNominee === nominee.id && voting ? 'voting' : ''}`}
-              >
-                {selectedNominee === nominee.id && voting 
-                  ? 'Processing...' 
-                  : hasVoted 
-                  ? 'Already Voted' 
-                  : 'Vote'}
-              </button>
+              <h3>{nominee.name}</h3>
+              <p>{nominee.description}</p>
+              
+              <div className="vote-stats">
+                <div className="vote-count">{nominee.voteCount}</div>
+                <div className="vote-label">Total Votes</div>
+              </div>
+
+              {hasVoted ? (
+                <div className="voted-badge">
+                  <span className="voted-icon">✓</span>
+                  Already Voted
+                </div>
+              ) : (
+                <button
+                  onClick={() => {
+                    setSelectedNominee(nominee.id);
+                    handleVote(nominee.id);
+                  }}
+                  disabled={!votingOpen || voting}
+                  className="btn-vote"
+                >
+                  {selectedNominee === nominee.id && voting 
+                    ? '⏳ Processing...' 
+                    : '🗳️ Vote Now'}
+                </button>
+              )}
             </div>
           ))
         )}
       </div>
 
-      <div className="voting-info">
-        <h3>Important Information:</h3>
-        <ul>
-          <li>You can only vote once</li>
-          <li>Your vote is recorded on the blockchain and cannot be changed</li>
-          <li>All transactions are transparent and verifiable</li>
-          <li>Make sure you're connected to the correct network (Ganache)</li>
-        </ul>
-      </div>
+      {/* Footer Info */}
+      {!hasVoted && votingOpen && nominees.length > 0 && (
+        <div className="voting-footer">
+          <div className="info-card">
+            <h3>✨ Voting Guidelines</h3>
+            <ul>
+              <li><strong>One Vote Only:</strong> Each wallet can vote exactly once</li>
+              <li><strong>Immutable:</strong> Your vote is permanent and cannot be changed</li>
+              <li><strong>Transparent:</strong> All votes are publicly verifiable on the blockchain</li>
+              <li><strong>Secure:</strong> Cryptographically secured through smart contracts</li>
+            </ul>
+          </div>
+        </div>
+      )}
     </div>
   );
 };

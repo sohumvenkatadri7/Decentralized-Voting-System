@@ -10,7 +10,22 @@ const Login = ({ web3Handler, account, setUserRole }) => {
   const [error, setError] = useState('');
   const [loading, setLoading] = useState(false);
   const [walletConnected, setWalletConnected] = useState(false);
+  const [darkMode, setDarkMode] = useState(true);
   const navigate = useNavigate();
+
+  useEffect(() => {
+    // Load theme preference
+    const savedTheme = localStorage.getItem('theme');
+    if (savedTheme) {
+      setDarkMode(savedTheme === 'dark');
+    }
+  }, []);
+
+  const toggleTheme = () => {
+    const newMode = !darkMode;
+    setDarkMode(newMode);
+    localStorage.setItem('theme', newMode ? 'dark' : 'light');
+  };
 
   useEffect(() => {
     // Check if wallet is already connected
@@ -112,99 +127,261 @@ const Login = ({ web3Handler, account, setUserRole }) => {
   };
 
   return (
-    <div className="login-container">
-      <div className="login-card">
-        <h1>Decentralized Voting System</h1>
-        <p className="subtitle">Secure • Transparent • Democratic</p>
+    <div className={`login-page ${darkMode ? 'dark' : 'light'}`}>
+      {/* Navigation Bar */}
+      <nav className="navbar">
+        <div className="navbar-container">
+          <div className="navbar-brand">
+            <div className="navbar-logo">🗳️</div>
+            <span className="navbar-title">VoteChain</span>
+          </div>
+          <div className="navbar-actions">
+            <button className="theme-toggle" onClick={toggleTheme} aria-label="Toggle theme">
+              {darkMode ? '☀️' : '🌙'}
+            </button>
+            <button 
+              className="admin-login-btn"
+              onClick={() => navigate('/admin-login')}
+            >
+              🛡️ Admin Login
+            </button>
+          </div>
+        </div>
+      </nav>
 
-        {/* Step 1: Connect Wallet First */}
-        {!walletConnected ? (
-          <div className="wallet-section">
-            <h2>Step 1: Connect Your Wallet</h2>
-            <div className="wallet-info">
-              <img 
-                src="https://upload.wikimedia.org/wikipedia/commons/3/36/MetaMask_Fox.svg" 
-                alt="MetaMask" 
-                className="metamask-logo"
-              />
-              <p>Connect your MetaMask wallet to continue</p>
-              <button onClick={handleMetaMaskConnect} className="btn-wallet">
-                🦊 Connect MetaMask Wallet
-              </button>
+      {/* Hero Section */}
+      <section className="hero-section">
+        <div className="hero-content">
+          <h1 className="hero-title">Secure Blockchain Voting</h1>
+          <p className="hero-subtitle">
+            Experience the future of democratic participation with our decentralized voting platform. 
+            Built on Ethereum with Aadhar-verified authentication for maximum security and transparency.
+          </p>
+          <div className="contract-hash">
+            <span className="hash-label">Contract:</span>
+            <code className="hash-value">0x742d35Cc6634C0532925a3b844Bc9e7595f0bEb</code>
+          </div>
+          <div className="hero-badges">
+            <div className="hero-badge">
+              <span className="hero-badge-icon">🔐</span>
+              <span className="hero-badge-text">Bank-Level Security</span>
+            </div>
+            <div className="hero-badge">
+              <span className="hero-badge-icon">⚡</span>
+              <span className="hero-badge-text">Instant Results</span>
+            </div>
+            <div className="hero-badge">
+              <span className="hero-badge-icon">✓</span>
+              <span className="hero-badge-text">Verified Identity</span>
             </div>
           </div>
-        ) : !isAadharVerified ? (
-          /* Step 2: Aadhar Verification After Wallet Connected */
-          <div className="verification-section">
-            <div className="success-check">✓ Wallet Connected: {account.slice(0, 6)}...{account.slice(-4)}</div>
-            <h2>Step 2: Verify Your Identity</h2>
-            
-            {!showOtpInput ? (
-              <form onSubmit={handleAadharSubmit}>
-                <div className="form-group">
-                  <label htmlFor="aadhar">Aadhar Number</label>
+        </div>
+      </section>
+
+      {/* Main Content - Centered Login */}
+      <main className="main-content">
+        <div className="login-wrapper">
+          <div className="auth-container">
+          <div className="auth-header">
+            <h2>Access Portal</h2>
+            <p>Secure authentication to cast your vote</p>
+          </div>
+
+          {error && (
+            <div className="error-message">
+              <span className="error-icon">⚠️</span>
+              {error}
+            </div>
+          )}
+
+          {/* Step 1: Connect Wallet First */}
+          {!walletConnected ? (
+            <div className="auth-form">
+              <div className="form-group">
+                <label>Aadhar Number</label>
+                <div className="input-wrapper">
                   <input
                     type="text"
-                    id="aadhar"
                     value={aadharNumber}
                     onChange={(e) => setAadharNumber(e.target.value)}
-                    placeholder="Enter 12-digit Aadhar number"
+                    placeholder="Enter 12-digit Aadhar"
                     maxLength="12"
-                    required
+                    disabled
                   />
+                  
                 </div>
-                <button type="submit" disabled={loading} className="btn-primary">
-                  {loading ? 'Sending OTP...' : 'Send OTP'}
-                </button>
-              </form>
-            ) : (
-              <form onSubmit={handleOtpSubmit}>
-                <div className="form-group">
-                  <label htmlFor="otp">Enter OTP</label>
-                  <input
-                    type="text"
-                    id="otp"
-                    value={otp}
-                    onChange={(e) => setOtp(e.target.value)}
-                    placeholder="Enter 6-digit OTP"
-                    maxLength="6"
-                    required
-                  />
+              </div>
+
+              <div className="divider">
+                <span>Connect Wallet First</span>
+              </div>
+
+              <button onClick={handleMetaMaskConnect} className="btn-login">
+                🦊 Connect MetaMask Wallet
+              </button>
+
+              <div className="security-badge">
+                <span className="security-icon">🛡️</span>
+                Blockchain-secured voting system
+              </div>
+            </div>
+          ) : !isAadharVerified ? (
+            /* Step 2: Aadhar Verification After Wallet Connected */
+            <div className="auth-form">
+              <div className="wallet-badge">
+                <span>✓</span>
+                <span>Wallet Connected</span>
+                <code>{account.slice(0, 6)}...{account.slice(-4)}</code>
+              </div>
+
+              {!showOtpInput ? (
+                <form onSubmit={handleAadharSubmit}>
+                  <div className="form-group">
+                    <label>Aadhar Number</label>
+                    <div className="input-wrapper">
+                      <input
+                        type="text"
+                        value={aadharNumber}
+                        onChange={(e) => setAadharNumber(e.target.value)}
+                        placeholder="Enter 12-digit Aadhar"
+                        maxLength="12"
+                        required
+                      />
+                      
+                    </div>
+                  </div>
+
+                  <button type="submit" disabled={loading} className="btn-login">
+                    {loading ? '⏳ Sending OTP...' : '📱 Send OTP'}
+                  </button>
+                </form>
+              ) : (
+                <form onSubmit={handleOtpSubmit}>
+                  <div className="form-group">
+                    <label>One-Time Password</label>
+                    <div className="input-wrapper">
+                      <input
+                        type="text"
+                        value={otp}
+                        onChange={(e) => setOtp(e.target.value)}
+                        placeholder="Enter 6-digit OTP"
+                        maxLength="6"
+                        required
+                        autoFocus
+                      />
+                      
+                    </div>
+                  </div>
+
+                  <button type="submit" disabled={loading} className="btn-login">
+                    {loading ? '⏳ Verifying...' : '✓ Verify & Continue'}
+                  </button>
+
+                  <button
+                    type="button"
+                    onClick={() => setShowOtpInput(false)}
+                    className="btn-secondary"
+                  >
+                    ← Change Aadhar Number
+                  </button>
+                </form>
+              )}
+
+              <div className="security-badge">
+                <span className="security-icon">🔐</span>
+                OTP sent to registered mobile
+              </div>
+            </div>
+          ) : (
+            /* Both Verified - Redirect happening */
+            <div className="success-wrapper">
+              <div className="success-icon">✓</div>
+              <h2>Authentication Complete!</h2>
+              <div className="success-items">
+                <div className="success-item">
+                  <span>✓</span>
+                  <span>Wallet Verified</span>
                 </div>
-                <button type="submit" disabled={loading} className="btn-primary">
-                  {loading ? 'Verifying...' : 'Verify OTP'}
-                </button>
-                <button
-                  type="button"
-                  onClick={() => setShowOtpInput(false)}
-                  className="btn-secondary"
-                >
-                  Change Aadhar Number
-                </button>
-              </form>
-            )}
+                <div className="success-item">
+                  <span>✓</span>
+                  <span>Identity Verified</span>
+                </div>
+              </div>
+              <div className="loading-bar">
+                <div className="loading-progress"></div>
+              </div>
+              <p>Redirecting to voting portal...</p>
+            </div>
+          )}
+          
+          {/* Tech Stack Badges */}
+          <div className="tech-stack">
+            <div className="tech-badge">
+              <img src="https://cryptologos.cc/logos/ethereum-eth-logo.svg" alt="Ethereum" className="tech-badge-icon" />
+              <div className="tech-badge-name">Ethereum</div>
+            </div>
+            <div className="tech-badge">
+              <img src="https://upload.wikimedia.org/wikipedia/commons/3/36/MetaMask_Fox.svg" alt="MetaMask" className="tech-badge-icon" />
+              <div className="tech-badge-name">MetaMask</div>
+            </div>
+            <div className="tech-badge">
+              <img src="https://trufflesuite.com/img/ganache-logo-dark.svg" alt="Ganache" className="tech-badge-icon" />
+              <div className="tech-badge-name">Ganache</div>
+            </div>
+            <div className="tech-badge">
+              <img src="https://cdn.jsdelivr.net/gh/devicons/devicon/icons/hardhat/hardhat-original.svg" alt="Hardhat" className="tech-badge-icon" />
+              <div className="tech-badge-name">Hardhat</div>
+            </div>
+            <div className="tech-badge">
+              <img src="https://cdn.jsdelivr.net/gh/devicons/devicon/icons/react/react-original.svg" alt="React" className="tech-badge-icon" />
+              <div className="tech-badge-name">React</div>
+            </div>
+            <div className="tech-badge">
+              <img src="https://cdn.jsdelivr.net/gh/devicons/devicon/icons/solidity/solidity-original.svg" alt="Solidity" className="tech-badge-icon" />
+              <div className="tech-badge-name">Solidity</div>
+            </div>
           </div>
-        ) : (
-          /* Both Verified - Redirect happening */
-          <div className="success-section">
-            <div className="success-check">✓ Wallet Connected</div>
-            <div className="success-check">✓ Aadhar Verified</div>
-            <h2>Authentication Complete!</h2>
-            <p>Redirecting you to the voting page...</p>
-          </div>
-        )}
-
-        {error && <div className="error-message">{error}</div>}
-
-        <div className="info-section">
-          <h3>Requirements:</h3>
-          <ul>
-            <li>MetaMask Wallet installed in your browser</li>
-            <li>Connected to Ganache network (localhost:7545)</li>
-            <li>Valid Aadhar Card for verification</li>
-          </ul>
         </div>
+        </div>
+      </main>
+
+      {/* Web3 Status Indicator */}
+      <div className="web3-status">
+        <div className="web3-status-dot"></div>
+        <div className="web3-status-text">Web3 Connected</div>
       </div>
+
+      {/* Footer - Features */}
+      <footer className="footer">
+        <div className="footer-content">
+          <div className="features-grid">
+            <div className="feature-card">
+              <div className="feature-icon">🔐</div>
+              <h3>Blockchain Secured</h3>
+              <p>Immutable & transparent voting records on Ethereum</p>
+            </div>
+            <div className="feature-card">
+              <div className="feature-icon">⚡</div>
+              <h3>Instant Results</h3>
+              <p>Real-time vote counting with zero manipulation</p>
+            </div>
+            <div className="feature-card">
+              <div className="feature-icon">🛡️</div>
+              <h3>Verified Identity</h3>
+              <p>Aadhar-based authentication for legitimate voters</p>
+            </div>
+            <div className="feature-card">
+              <div className="feature-icon">🌐</div>
+              <h3>Decentralized</h3>
+              <p>No central authority, truly democratic system</p>
+            </div>
+          </div>
+          <div className="footer-bottom">
+            <p>© 2025 VoteChain. Built on Ethereum blockchain.</p>
+            <p className="footer-credit">Made by <span>DeltDevz</span></p>
+          </div>
+        </div>
+      </footer>
     </div>
   );
 };
