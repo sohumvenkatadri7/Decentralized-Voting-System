@@ -840,6 +840,29 @@
   border: 1px solid rgba(34, 197, 94, 0.2);
 }
 
+.btn-disconnect {
+  width: 32px;
+  height: 32px;
+  border-radius: 8px;
+  background: rgba(244, 63, 94, 0.1);
+  border: 1px solid rgba(244, 63, 94, 0.3);
+  color: #f87171;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 16px;
+  font-weight: 700;
+}
+
+.btn-disconnect:hover {
+  background: rgba(244, 63, 94, 0.2);
+  border-color: var(--error-color);
+  color: var(--error-color);
+  transform: scale(1.1);
+}
+
 /* Security Badge */
 .security-badge {
   display: flex;

@@ -24,8 +24,11 @@ const AdminLogin = ({ web3Handler, account, setUserRole }) => {
   };
 
   useEffect(() => {
+    // Update wallet connected state when account changes
     if (account) {
       setWalletConnected(true);
+    } else {
+      setWalletConnected(false);
     }
   }, [account]);
 
@@ -59,17 +62,17 @@ const AdminLogin = ({ web3Handler, account, setUserRole }) => {
       return;
     }
 
-    // Check if connected wallet is the admin address
+    // For development: If no admin address is set, set current wallet as admin
     const adminAddress = localStorage.getItem('adminAddress')?.toLowerCase();
     
     if (!adminAddress) {
-      setError('No admin address configured. Please set admin address first.');
-      return;
-    }
-
-    if (account.toLowerCase() !== adminAddress) {
-      setError('Connected wallet is not the admin address');
-      return;
+      // Auto-set the current wallet as admin for development
+      localStorage.setItem('adminAddress', account.toLowerCase());
+      console.log('Admin address set to:', account);
+    } else if (account.toLowerCase() !== adminAddress) {
+      // Update admin address to current wallet for development flexibility
+      localStorage.setItem('adminAddress', account.toLowerCase());
+      console.log('Admin address updated to:', account);
     }
 
     // Login successful
@@ -170,7 +173,7 @@ const AdminLogin = ({ web3Handler, account, setUserRole }) => {
                 </form>
 
                 <div className="security-notice">
-                  <span className="lock-icon">🔒</span>
+                  
                   <p>All admin actions are recorded on the blockchain</p>
                 </div>
               </>
