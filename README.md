@@ -251,6 +251,57 @@ The application will open at `http://localhost:3000`
 - Delete `node_modules` and `package-lock.json`, then reinstall
 - Check browser console for errors
 
+## 📁 Project Structure
+
+```
+Decentralized-Voting-System/
+├── contracts/               # Solidity smart contracts
+│   └── VotingSystem.sol    # Main voting contract
+├── src/
+│   ├── components/          # React components
+│   │   ├── Login.js        # Voter login with Aadhar + MetaMask
+│   │   ├── Login.css       # Voter login styles (Deep Teal theme)
+│   │   ├── AdminLogin.js   # Admin login (Purple theme)
+│   │   ├── AdminLogin.css  # Admin login styles
+│   │   ├── Voting.js       # Voting interface for voters
+│   │   ├── Voting.css      # Voting page styles
+│   │   ├── Admin.js        # Admin control panel
+│   │   ├── Admin.css       # Admin panel styles
+│   │   ├── AdminSetup.js   # First-time admin setup modal
+│   │   └── AdminSetup.css  # Admin setup styles
+│   ├── contracts/           # Compiled contract artifacts
+│   │   ├── VotingSystem.json      # Contract ABI
+│   │   └── contract-address.json  # Deployed contract address
+│   ├── utils/
+│   │   └── web3Utils.js    # Web3 helper functions
+│   ├── App.js              # Main app component with routing
+│   ├── App.css             # Global app styles
+│   └── index.js            # React entry point
+├── scripts/
+│   ├── deploy.js           # Deployment script for smart contract
+│   ├── check-ganache.js    # Ganache connection checker
+│   └── check-voter-status.js  # Voter registration checker
+├── test/
+│   └── VotingSystem.test.js   # Smart contract tests
+├── public/
+│   └── index.html          # HTML template
+├── docs/                   # Project documentation
+│   ├── QUICKSTART.md       # Quick start guide
+│   ├── ARCHITECTURE.md     # System architecture
+│   ├── API.md             # Smart contract API
+│   ├── ADMIN_SETUP_GUIDE.md  # Admin setup instructions
+│   ├── DESIGN_PHILOSOPHY.md  # Design decisions
+│   ├── PRODUCTION.md       # Production deployment guide
+│   └── ...                 # Other documentation
+├── artifacts/              # Hardhat compilation artifacts (gitignored)
+├── cache/                  # Hardhat cache (gitignored)
+├── .gitignore             # Git ignore rules
+├── hardhat.config.js      # Hardhat configuration
+├── webpack.config.js      # Webpack build configuration
+├── package.json           # Dependencies and scripts
+└── README.md              # This file
+```
+
 ## Security Considerations
 
 ⚠️ **Important**: This is a demonstration project. For production use:
