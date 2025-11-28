@@ -170,7 +170,7 @@ const AdminLogin = ({ web3Handler, account, setUserRole }) => {
                 </form>
 
                 <div className="security-notice">
-                  <span className="lock-icon">🔒</span>
+                  
                   <p>All admin actions are recorded on the blockchain</p>
                 </div>
               </>
