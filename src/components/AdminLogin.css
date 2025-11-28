@@ -3,12 +3,12 @@
 
 /* CSS Variables for Theme */
 :root {
-  --primary-color: #0f766e;
-  --accent-color: #0284c7;
+  --primary-color: #14b8a6;
+  --accent-color: #0d9488;
   --success-color: #10b981;
   --error-color: #f43f5e;
-  --admin-color: #9333ea;
-  --admin-accent: #c026d3;
+  --admin-color: #14b8a6;
+  --admin-accent: #0d9488;
   
   --font-primary: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
   --font-display: 'Space Grotesk', 'Inter', sans-serif;
