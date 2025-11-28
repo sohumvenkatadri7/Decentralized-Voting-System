@@ -102,6 +102,7 @@ const Voting = ({ contract, account }) => {
   };
 
   const handleLogout = () => {
+    // Clear user role and navigate back to login
     navigate('/');
   };
 

@@ -28,9 +28,11 @@ const Login = ({ web3Handler, account, setUserRole }) => {
   };
 
   useEffect(() => {
-    // Check if wallet is already connected
+    // Update wallet connected state when account changes
     if (account) {
       setWalletConnected(true);
+    } else {
+      setWalletConnected(false);
     }
   }, [account]);
 
@@ -107,16 +109,13 @@ const Login = ({ web3Handler, account, setUserRole }) => {
 
   const handleMetaMaskConnect = async () => {
     try {
-      // Request account access - this will show MetaMask popup
-      await window.ethereum.request({
-        method: 'wallet_requestPermissions',
-        params: [{ eth_accounts: {} }],
-      });
-      
-      // Then connect
+      setError('');
+      setLoading(true);
       await web3Handler();
-      setWalletConnected(true);
+      setLoading(false);
+      // walletConnected state will be updated by the useEffect when account changes
     } catch (err) {
+      setLoading(false);
       if (err.code === 4001) {
         setError('Please connect your wallet to continue');
       } else {
@@ -124,6 +123,18 @@ const Login = ({ web3Handler, account, setUserRole }) => {
       }
       console.error(err);
     }
+  };
+
+  const handleDisconnectWallet = () => {
+    // Reset all states
+    setWalletConnected(false);
+    setIsAadharVerified(false);
+    setAadharNumber('');
+    setOtp('');
+    setShowOtpInput(false);
+    setError('');
+    // Reload page to clear wallet connection
+    window.location.reload();
   };
 
   return (
@@ -232,6 +243,9 @@ const Login = ({ web3Handler, account, setUserRole }) => {
                 <span>✓</span>
                 <span>Wallet Connected</span>
                 <code>{account.slice(0, 6)}...{account.slice(-4)}</code>
+                <button onClick={handleDisconnectWallet} className="btn-disconnect" title="Disconnect Wallet">
+                  ✕
+                </button>
               </div>
 
               {!showOtpInput ? (

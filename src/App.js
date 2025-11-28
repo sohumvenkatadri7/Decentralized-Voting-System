@@ -21,24 +21,6 @@ function App() {
     if (!adminAddress) {
       setShowAdminSetup(true);
     }
-
-    // Listen to account changes
-    listenToAccountChanges((newAccount) => {
-      if (newAccount) {
-        setAccount(newAccount);
-      } else {
-        // User disconnected wallet
-        setAccount(null);
-        setContract(null);
-        setUserRole(null);
-      }
-    });
-
-    // Listen to chain changes
-    listenToChainChanges((chainId) => {
-      // Reload page on network change
-      window.location.reload();
-    });
   }, []);
 
   const web3Handler = async () => {
