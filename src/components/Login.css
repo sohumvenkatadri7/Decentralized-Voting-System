@@ -419,11 +419,14 @@
   opacity: 1;
 }
 
+
+
 .hero-badge-icon {
   font-size: 24px;
   filter: drop-shadow(0 2px 8px rgba(20, 184, 166, 0.3));
-  transition: transform 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+  transition: all 0.6s cubic-bezier(0.68, -0.55, 0.265, 1.55);
   animation: iconFloat 3s ease-in-out infinite;
+  transform-origin: center;
 }
 
 @keyframes iconFloat {
@@ -539,9 +542,9 @@
   animation: badgeRotate 3s linear infinite;
 }
 
-.hero-badge:active .verified-badge-gold::after {
-  animation: badgeRotate 0.4s linear;
-}
+
+
+
 
 /* Main Content - Auth Section */
 .main-content {
