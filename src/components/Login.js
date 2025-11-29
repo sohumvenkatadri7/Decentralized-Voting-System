@@ -174,15 +174,15 @@ const Login = ({ web3Handler, account, setUserRole }) => {
           </div>
           <div className="hero-badges">
             <div className="hero-badge">
-              <span className="hero-badge-icon">🔐</span>
+              <span className="hero-badge-icon security-icon">🔐</span>
               <span className="hero-badge-text">Bank-Level Security</span>
             </div>
             <div className="hero-badge">
-              <span className="hero-badge-icon">⚡</span>
+              <span className="hero-badge-icon lightning-icon">⚡</span>
               <span className="hero-badge-text">Instant Results</span>
             </div>
             <div className="hero-badge">
-              <span className="hero-badge-icon">✓</span>
+              <span className="hero-badge-icon verified-badge-gold">✓</span>
               <span className="hero-badge-text">Verified Identity</span>
             </div>
           </div>
