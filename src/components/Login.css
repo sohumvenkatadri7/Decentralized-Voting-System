@@ -293,6 +293,9 @@
 
 .hero-content {
   max-width: 900px;
+
+
+  
   text-align: center;
   margin-bottom: 60px;
   position: relative;
@@ -422,7 +425,7 @@
 
 
 .hero-badge-icon {
-  font-size: 24px;
+  font-size: 28px;
   filter: drop-shadow(0 2px 8px rgba(20, 184, 166, 0.3));
   transition: all 0.6s cubic-bezier(0.68, -0.55, 0.265, 1.55);
   animation: iconFloat 3s ease-in-out infinite;
