@@ -1,6 +1,7 @@
 
 import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
+import { motion, AnimatePresence } from 'framer-motion';
 import './Admin.css';
 
 const Admin = ({ contract, account }) => {
@@ -168,64 +169,120 @@ const Admin = ({ contract, account }) => {
   return (
     <div className="admin-container">
       {/* Header */}
-      <header className="admin-header">
-        <h1>Admin Control Panel</h1>
-        <p className="subtitle">Manage voting process and nominees</p>
-        <div className="header-info">
+      <motion.header 
+        className="admin-header"
+        initial={{ y: -50, opacity: 0 }}
+        animate={{ y: 0, opacity: 1 }}
+        transition={{ duration: 0.5 }}
+      >
+        <motion.h1
+          initial={{ opacity: 0 }}
+          animate={{ opacity: 1 }}
+          transition={{ delay: 0.2 }}
+        >
+          Admin Control Panel
+        </motion.h1>
+        <motion.p 
+          className="subtitle"
+          initial={{ opacity: 0 }}
+          animate={{ opacity: 1 }}
+          transition={{ delay: 0.3 }}
+        >
+          Manage voting process and nominees
+        </motion.p>
+        <motion.div 
+          className="header-info"
+          initial={{ x: 50, opacity: 0 }}
+          animate={{ x: 0, opacity: 1 }}
+          transition={{ delay: 0.4 }}
+        >
           <div className="account-badge">
             <span>👑</span>
             <code>{account.slice(0, 6)}...{account.slice(-4)}</code>
           </div>
-          <button onClick={handleLogout} className="btn-logout">
+          <motion.button 
+            onClick={handleLogout} 
+            className="btn-logout"
+            whileHover={{ scale: 1.05, x: 5 }}
+            whileTap={{ scale: 0.95 }}
+          >
             Logout →
-          </button>
-        </div>
-      </header>
+          </motion.button>
+        </motion.div>
+      </motion.header>
 
-      {error && (
-        <div className="status-message error">
-          ⚠️ {error}
-        </div>
-      )}
+      <AnimatePresence mode="wait">
+        {error && (
+          <motion.div 
+            className="status-message error"
+            initial={{ opacity: 0, y: -20, scale: 0.9 }}
+            animate={{ opacity: 1, y: 0, scale: 1 }}
+            exit={{ opacity: 0, y: -20, scale: 0.9 }}
+            transition={{ duration: 0.3 }}
+          >
+            ⚠️ {error}
+          </motion.div>
+        )}
+      </AnimatePresence>
 
       {/* Stats Dashboard */}
-      <div className="admin-stats">
-        <div className="stat-card">
-          <div className="stat-label">Total Votes Cast</div>
-          <div className="stat-value">{totalVotes}</div>
-        </div>
-        
-        <div className="stat-card">
-          <div className="stat-label">Total Nominees</div>
-          <div className="stat-value">{nominees.length}</div>
-        </div>
-        
-        <div className="stat-card">
-          <div className="stat-label">Voting Status</div>
-          <div className="stat-value" style={{ color: votingOpen ? '#22c55e' : '#ef4444' }}>
-            {votingOpen ? 'Open' : 'Closed'}
-          </div>
-        </div>
-      </div>
+      <motion.div 
+        className="admin-stats"
+        initial={{ opacity: 0, y: 20 }}
+        animate={{ opacity: 1, y: 0 }}
+        transition={{ delay: 0.5, duration: 0.5 }}
+      >
+        {[
+          { label: 'Total Votes Cast', value: totalVotes },
+          { label: 'Total Nominees', value: nominees.length },
+          { label: 'Voting Status', value: votingOpen ? 'Open' : 'Closed', color: votingOpen ? '#22c55e' : '#ef4444' }
+        ].map((stat, index) => (
+          <motion.div 
+            key={stat.label}
+            className="stat-card"
+            initial={{ opacity: 0, scale: 0.9 }}
+            animate={{ opacity: 1, scale: 1 }}
+            transition={{ delay: 0.6 + index * 0.1, duration: 0.4 }}
+            whileHover={{ scale: 1.05, y: -5 }}
+          >
+            <div className="stat-label">{stat.label}</div>
+            <div className="stat-value" style={stat.color ? { color: stat.color } : {}}>
+              {stat.value}
+            </div>
+          </motion.div>
+        ))}
+      </motion.div>
 
       {/* Main Content */}
       <div className="admin-sections">
         {/* Voting Control */}
-        <div className="admin-section">
+        <motion.div 
+          className="admin-section"
+          initial={{ opacity: 0, x: -30 }}
+          animate={{ opacity: 1, x: 0 }}
+          transition={{ delay: 0.7, duration: 0.5 }}
+        >
           <h2>🗳️ Voting Control</h2>
           <p style={{ color: '#64748b', marginBottom: '20px', fontSize: '15px' }}>
             {votingOpen ? 'Voting is currently open. Close it to prevent new votes.' : 'Voting is currently closed. Open it to allow users to vote.'}
           </p>
-          <button 
+          <motion.button 
             onClick={handleToggleVoting} 
             className={votingOpen ? 'btn-danger' : 'btn-success'}
+            whileHover={{ scale: 1.05 }}
+            whileTap={{ scale: 0.95 }}
           >
             {votingOpen ? '🔒 Close Voting Now' : '🔓 Open Voting Now'}
-          </button>
-        </div>
+          </motion.button>
+        </motion.div>
 
         {/* Add Nominee */}
-        <div className="admin-section">
+        <motion.div 
+          className="admin-section"
+          initial={{ opacity: 0, x: -30 }}
+          animate={{ opacity: 1, x: 0 }}
+          transition={{ delay: 0.8, duration: 0.5 }}
+        >
           <h2>➕ Add New Nominee</h2>
           <form onSubmit={handleAddNominee}>
             <div className="form-group">
@@ -250,14 +307,25 @@ const Admin = ({ contract, account }) => {
               />
             </div>
             
-            <button type="submit" disabled={adding} className="btn-primary">
+            <motion.button 
+              type="submit" 
+              disabled={adding} 
+              className="btn-primary"
+              whileHover={{ scale: adding ? 1 : 1.05 }}
+              whileTap={{ scale: adding ? 1 : 0.95 }}
+            >
               {adding ? '⏳ Adding Nominee...' : '✓ Add Nominee'}
-            </button>
+            </motion.button>
           </form>
-        </div>
+        </motion.div>
 
         {/* Register Voter */}
-        <div className="admin-section">
+        <motion.div 
+          className="admin-section"
+          initial={{ opacity: 0, x: -30 }}
+          animate={{ opacity: 1, x: 0 }}
+          transition={{ delay: 0.9, duration: 0.5 }}
+        >
           <h2>👤 Register New Voter</h2>
           <form onSubmit={handleRegisterVoter}>
             <div className="form-group">
@@ -282,19 +350,35 @@ const Admin = ({ contract, account }) => {
               />
             </div>
             
-            <button type="submit" disabled={registering} className="btn-primary">
+            <motion.button 
+              type="submit" 
+              disabled={registering} 
+              className="btn-primary"
+              whileHover={{ scale: registering ? 1 : 1.05 }}
+              whileTap={{ scale: registering ? 1 : 0.95 }}
+            >
               {registering ? '⏳ Registering...' : '✓ Register Voter'}
-            </button>
+            </motion.button>
           </form>
-        </div>
+        </motion.div>
 
         {/* Live Results */}
-        <div className="admin-section">
+        <motion.div 
+          className="admin-section"
+          initial={{ opacity: 0, x: -30 }}
+          animate={{ opacity: 1, x: 0 }}
+          transition={{ delay: 1.0, duration: 0.5 }}
+        >
           <h2>📊 Live Results</h2>
           {nominees.length === 0 ? (
-            <div className="no-results">
+            <motion.div 
+              className="no-results"
+              initial={{ opacity: 0 }}
+              animate={{ opacity: 1 }}
+              transition={{ delay: 1.2 }}
+            >
               No nominees have been added yet. Add nominees using the form above.
-            </div>
+            </motion.div>
           ) : (
             <div className="results-grid">
               {nominees.map((nominee, index) => {
@@ -302,7 +386,14 @@ const Admin = ({ contract, account }) => {
                 const isWinner = index === 0 && nominee.voteCount > 0;
                 
                 return (
-                  <div key={nominee.id} className="result-item">
+                  <motion.div 
+                    key={nominee.id} 
+                    className="result-item"
+                    initial={{ opacity: 0, y: 20 }}
+                    animate={{ opacity: 1, y: 0 }}
+                    transition={{ delay: 1.2 + index * 0.1, duration: 0.4 }}
+                    whileHover={{ scale: 1.02, y: -3 }}
+                  >
                     <div className="result-header">
                       <h3>
                         {index + 1}. {nominee.name}
@@ -315,9 +406,12 @@ const Admin = ({ contract, account }) => {
                     </div>
                     <p className="result-details">{nominee.description}</p>
                     <div className="progress-bar-container">
-                      <div 
+                      <motion.div 
                         className="progress-bar" 
                         style={{ width: `${percentage}%` }}
+                        initial={{ width: 0 }}
+                        animate={{ width: `${percentage}%` }}
+                        transition={{ delay: 1.4 + index * 0.1, duration: 0.8 }}
                       />
                     </div>
                     <div style={{ 
@@ -329,12 +423,12 @@ const Admin = ({ contract, account }) => {
                     }}>
                       {percentage}%
                     </div>
-                  </div>
+                  </motion.div>
                 );
               })}
             </div>
           )}
-        </div>
+        </motion.div>
       </div>
     </div>
   );
