@@ -319,6 +319,39 @@
   color: #fca5a5;
 }
 
+.error-banner > div {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  flex: 1;
+}
+
+.copy-address-btn {
+  background: rgba(15, 118, 110, 0.2);
+  border: 1px solid rgba(15, 118, 110, 0.4);
+  color: #5eead4;
+  padding: 10px 20px;
+  border-radius: 12px;
+  font-size: 14px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  font-family: var(--font-primary);
+  margin-top: 8px;
+  align-self: flex-start;
+}
+
+.copy-address-btn:hover {
+  background: rgba(15, 118, 110, 0.3);
+  border-color: rgba(15, 118, 110, 0.6);
+  transform: translateY(-2px);
+  box-shadow: 0 4px 12px rgba(15, 118, 110, 0.3);
+}
+
+.copy-address-btn:active {
+  transform: translateY(0);
+}
+
 .success-banner {
   background: rgba(16, 185, 129, 0.1);
   border: 1px solid rgba(16, 185, 129, 0.3);
